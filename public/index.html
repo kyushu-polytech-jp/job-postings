@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九州職業能力開発大学校 求人情報検索</title>
+    <link rel="stylesheet" href="style.css"> <!-- スタイルシートも用意 -->
+</head>
+<body>
+    <h1>九州ポリテクカレッジ 求人情報検索</h1>
+
+    <div class="search-form-container">
+        <form id="searchForm">
+            <div class="form-group">
+                <label for="yearSelect">年度:</label>
+                <select id="yearSelect">
+                    <!-- 今後年度が増えたらここに追加 -->
+                    <option value="2027">2027年</option>
+                    <option value="2026">2026年</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="departmentSelect">科名:</label>
+                <select id="departmentSelect">
+                    <!-- departments コレクションから動的に追加 -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ownerNameKanaInput">カイシャメイ:(全角カナ部分一致、カブシキは含まない場合あり)</label>
+		<input id="ownerNameKanaInput" type="text" placeholder="カナ（部分一致）例: ポリテク">
+            </div>
+
+            <div class="form-group">
+                <label for="prefectureInput">都道府県:(前方一致のみ)</label>
+                <input type="text" id="prefectureInput" placeholder="都道府県（前方一致）">
+            </div>
+
+            <button type="submit" id="searchButton">検索</button>
+        </form>
+    </div>
+
+    <div class="search-results-container">
+        <h2>検索結果</h2>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>会社名</th>
+                    <th>業種</th>
+                    <th>従業員数</th>
+                    <th>資本</th>
+                    <th>住所</th>
+                </tr>
+            </thead>
+            <tbody id="resultsTableBody">
+                <!-- 検索結果はここに動的に追加されます -->
+            </tbody>
+        </table>
+        <div id="moreInfo" style="margin-top: 10px;">
+            <!-- 合計件数を表示 -->
+        </div>
+
+        <!-- ここからページネーションコントロールを追加 -->
+        <div class="pagination-controls" style="margin-top: 20px;">
+            <button id="prevPageButton" disabled>前の10件</button>
+            <span id="pageInfo" style="margin: 0 10px;"></span>
+            <button id="nextPageButton" disabled>次の10件</button>
+        </div>
+        <!-- ここまでページネーションコントロール -->
+
+    </div>
+
+    <div id="pdfDisplayArea" style="margin-top: 30px;">
+        <!-- PDFビューアがここに表示されます -->
+    </div>
+
+    <script type="module" src="bundle.js"></script> <!-- JavaScriptモジュールを読み込む -->
+</body>
+</html>
+

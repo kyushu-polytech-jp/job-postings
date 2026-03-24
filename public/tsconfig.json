@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "esnext",            // ここを "esnext" に変更
+    "moduleResolution": "bundler", // ここを "bundler" に変更
+    "esModuleInterop": true,       // これは維持（必須）
+    "allowSyntheticDefaultImports": true, // esModuleInterop と共に推奨
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    // 出力ディレクトリを指定すると、元のmain.jsを上書きせずに、
+    // 例えば dist/main.js に出力されるので便利です。
+    // "outDir": "./dist",
+    // "rootDir": "./"
+  },
+  "include": ["main.ts", "**/*.d.ts"],
+  "exclude": ["node_modules"] // node_modulesをコンパイル対象から除外
+}

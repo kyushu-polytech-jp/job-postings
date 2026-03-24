@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "poly9wanted"
+  },
+  "targets": {
+    "poly9wanted": {
+      "hosting": {
+        "poly9mente": [
+          "poly9mente"
+        ],
+        "poly9wanted": [
+          "poly9wanted"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

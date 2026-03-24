@@ -1,0 +1,25 @@
+{
+  "name": "job-postings",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build:poly9wanted": "esbuild ./public/main.ts --bundle --outfile=./public/bundle.js --format=esm --platform=browser --target=es2017",
+    "build:poly9mente:main": "esbuild ./publicMente/main.ts --bundle --outfile=./publicMente/bundle.js --format=esm --platform=browser --target=es2017",
+    "build:poly9mente:login": "esbuild ./publicMente/login.ts --bundle --outfile=./publicMente/login.js --format=esm --platform=browser --target=es2017",
+    "build:poly9mente": "npm run build:poly9mente:main && npm run build:poly9mente:login",
+    "build": "npm run build:poly9wanted && npm run build:poly9mente"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.2",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "firebase": "^12.8.0",
+    "firebase-admin": "^13.6.0"
+  }
+}
+

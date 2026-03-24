@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>求人票情報登録システム(九州職業能力開発大学校)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        h1 { text-align: center; color: #0056b3; margin-bottom: 30px; }
+
+        /* Top Section */
+        .top-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        .top-section .input-group { display: flex; align-items: center; margin-bottom: 15px; margin-right: 20px; }
+        .top-section .input-group label { margin-right: 10px; font-weight: bold; min-width: 70px; }
+        .top-section .input-group input[type="number"] { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; width: 120px; }
+        .top-section .buttons { display: flex; gap: 10px; margin-bottom: 15px; }
+        .top-section .buttons button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; transition: background-color 0.3s ease; }
+        .top-section .buttons button:hover { opacity: 0.9; }
+        #newRegistrationBtn { background-color: #28a745; color: white; }
+        #confirmModifyBtn { background-color: #007bff; color: white; }
+        #deleteBtn { background-color: #dc3545; color: white; }
+
+        /* Middle Section (Form) */
+        .middle-section h2 { text-align: center; color: #0056b3; margin-bottom: 20px; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 15px 20px;
+            align-items: start;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .form-grid label { font-weight: bold; padding-top: 8px; }
+        .form-grid input[type="text"],
+        .form-grid input[type="number"],
+        .form-grid textarea {
+            width: calc(100% - 24px);
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .form-grid textarea { resize: vertical; min-height: 80px; }
+        .form-grid .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 5px; }
+        .form-grid .checkbox-group div { display: flex; align-items: center; }
+        .form-grid .checkbox-group input[type="checkbox"] { margin-right: 5px; }
+
+        .form-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px; }
+        .form-actions button { padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.05rem; transition: background-color 0.3s ease; }
+        #submitBtn { background-color: #28a745; color: white; }
+        #cancelBtn { background-color: #6c757d; color: white; }
+
+        /* Bottom Section (PDF Viewer) */
+        .bottom-section { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; text-align: center; }
+        .bottom-section h2 { color: #0056b3; margin-bottom: 15px; }
+        #pdfViewer { width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 5px; }
+
+        /* Utility classes */
+        .hidden { display: none; }
+        .read-only { background-color: #e9ecef; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 上側: タイトル、機能選択ボタン、年度と受付番号の入力欄 -->
+        <h1>求人票登録システム(登録は管理ユーザで行います)</h1>
+        <div class="top-section">
+            <div class="input-group">
+                <label for="inputReceptionYear">年度:</label>
+                <input type="number" id="inputReceptionYear" min="2027" max="2030">
+            </div>
+            <div class="input-group">
+                <label for="inputReceptionNumber">受付番号:</label>
+                <input type="number" id="inputReceptionNumber" min="0001">
+            </div>
+            <div class="buttons">
+                <button id="newRegistrationBtn">新規登録</button>
+                <button id="confirmModifyBtn">確認・修正</button>
+            </div>
+        </div>
+
+        <!-- 中側: 求人票データ表示・入力フォーム -->
+        <div class="middle-section">
+            <h2>求人票データ</h2>
+            <div class="form-grid">
+                <!-- 募集年度 (編集不可) -->
+                <label for="recruitmentYear">募集年度:</label>
+                <input type="text" id="recruitmentYear" class="read-only" readonly>
+
+                <!-- 受付番号 (編集不可) -->
+                <label for="receptionNumber">受付番号:</label>
+                <input type="text" id="receptionNumber" class="read-only" readonly>
+
+                <!-- 募集科 (チェックボックス) -->
+                <label>募集科</label>
+                <div id="recruitingDepartments" class="checkbox-group">
+                    <!-- Departments will be loaded here by JavaScript -->
+                </div>
+                <!-- fieldset>
+                    <legend>募集科（チェックボックス）</legend>
+                    <div id="recruitingDepartments" class="checkbox-group">
+                    </div>
+                </fieldset>
+		-->
+
+                <!-- 企業名 -->
+                <label for="ownerName">企業名:</label>
+                <input type="text" id="ownerName">
+
+                <!-- キギョウメイ -->
+                <label for="ownerNameKana">キギョウメイ:</label>
+                <input type="text" id="ownerNameKana">
+
+                <!-- 郵便番号 -->
+                <label for="postalCode">郵便番号:</label>
+                <input type="text" id="postalCode">
+
+                <!-- 都道府県 -->
+                <label for="prefecture">都道府県:</label>
+                <input type="text" id="prefecture">
+
+                <!-- 市区町村 -->
+                <label for="address">市区町村:</label>
+                <input type="text" id="address" autocomplete="address-level2">
+
+                <!-- ビル名 -->
+                <label for="buildingName">ビル名:</label>
+                <input type="text" id="buildingName">
+
+                <!-- 電話番号 -->
+                <label for="phoneNumber">電話番号:</label>
+                <input type="text" id="phoneNumber">
+
+                <!-- 資本金 -->
+                <label for="capital">資本金:</label>
+                <input type="text" id="capital">
+
+                <!-- 従業員数 -->
+                <label for="numberOfEmployees">従業員数:</label>
+                <input type="text" id="numberOfEmployees">
+
+                <!-- 会社区分 -->
+                <label for="companyType">会社区分:</label>
+                <input type="text" id="companyType">
+
+                <!-- 産業分類 -->
+                <label for="industryClassification">産業分類:</label>
+                <input type="text" id="industryClassification">
+
+                <!-- 職種 -->
+                <label for="jobType">職種:</label>
+                <input type="text" id="jobType">
+
+                <!-- 補足 -->
+                <label for="notes">補足:</label>
+                <textarea id="notes"></textarea>
+
+                <!-- URL -->
+                <label for="url">URL:</label>
+                <input type="text" id="url">
+            </div>
+            <div class="form-actions">
+                <button id="submitBtn">編集完了</button>
+                <button id="deleteBtn">削除</button>
+                <button id="cancelBtn">キャンセル</button>
+            </div>
+        </div>
+
+        <!-- 下側: PDF表示 -->
+        <div class="bottom-section">
+            <h2>求人票PDF</h2>
+            <iframe id="pdfViewer" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <!-- main.js を ES Modules として読み込む -->
+    <script type="module" src="bundle.js"></script>
+</body>
+</html>
